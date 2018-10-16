@@ -48,24 +48,24 @@
 
 - name: Create 25 definitions files for PVs 5G size
   hosts: localhost
-    - name: "Creating the files.."
+    - name: Creating the files...
       script: ./scripts/pvs_5Gsize.sh
       
 - name: Create 25 definitions files for PVs 10G size
   hosts: localhost
-    - name: "Creating the files.."
+    - name: Creating the files...
       script: ./scripts/pvs_10Gsize.sh
       
 - name: Create all PVs from definitions files
   hosts: localhost
-    - name: "Creating PVs from definition files.."
+    - name: Creating PVs from definition files...
       script: ./scripts/pvs_from_df.sh
       
 - name: Fix NFS Persistent Volume Recycling
   tasks:
-    - name: "Pull ose-recycler image"
+    - name: Pull ose-recycler image
       shell: docker pull registry.access.redhat.com/openshift3/ose-recycler:latest
-    - name: "Tag  ose-recycler image as latest"
+    - name: Tag  ose-recycler image as latest
       shell: docker tag registry.access.redhat.com/openshift3/ose-recycler:latest registry.access.redhat.com/openshift3/ose-recycler:v3.9.30
   tags:
     - fixnfspvr
