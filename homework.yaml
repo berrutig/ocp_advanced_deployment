@@ -73,7 +73,7 @@
   hosts: localhost 
   tasks: 
     - name: Create project request template in default project
-      shell: "oc create -f ./project-template.yml -n default || oc replace -f ./project-template.yml -n default"
+      shell: "oc create -f ./project-template.yaml -n default || oc replace -f ./project-template.yaml -n default"
   tags:
     - fixtemplate
 
