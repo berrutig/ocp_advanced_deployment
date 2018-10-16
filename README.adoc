@@ -13,10 +13,8 @@ The person grading the assignment will
 deployed properly.
 
 THe procedure to install openshift is this one:
-
 ansible-playbook ./ocp_advanced_deployment/homework.yaml
 
 To uninstall openshift launch this command:
-
 ./ocp_advanced_deployment/scripts/uninstall.sh
 
