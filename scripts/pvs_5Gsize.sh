@@ -3,7 +3,7 @@ export GUID=`hostname|awk -F. '{print $2}'`
 export volsize="5Gi"
 mkdir /root/pvs
 
-echo 'Now create the persistent volumes 1-25 of 5Gi each as RWO'
+echo 'Now create the persistent volumes 1-25 of 5Gi each as RWO-Recycle'
 
 for volume in pv{1..25} ; do
 cat << EOF > /root/pvs/${volume}
