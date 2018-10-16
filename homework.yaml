@@ -79,6 +79,17 @@
     - name: Tag  ose-recycler image as latest
       shell: docker tag registry.access.redhat.com/openshift3/ose-recycler:latest registry.access.redhat.com/openshift3/ose-recycler:v3.9.30
 
+- name: Setup CI/CD pipeline
+  hosts: localhost
+  tasks:
+    - name: Checkout CI/CD demo code..
+      git:
+        repo: 'https://github.com/berrutig/openshift-cd-demo.git'
+        dest: /root/openshift-cd-demo
+        version: ocp-3.9
+    - name: Provision the demo environment..
+      shell: /root/openshift-cd-demo/scripts/provision.sh --user andrew deploy
+
 - name: Setup project request template
   hosts: localhost 
   tasks: 
