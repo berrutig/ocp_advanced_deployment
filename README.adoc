@@ -15,6 +15,3 @@ deployed properly.
 THe procedure to install openshift is this one:
 ansible-playbook ./ocp_advanced_deployment_homework/homework.yaml
 
-To uninstall openshift launch this command:
-./ocp_advanced_deployment_homework/scripts/uninstall.sh
-
