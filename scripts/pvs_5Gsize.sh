@@ -2,6 +2,9 @@ export GUID=`hostname|awk -F. '{print $2}'`
 
 export volsize="5Gi"
 mkdir /root/pvs
+
+echo 'Now create the persistent volumes 1-25 of 5Gi each as RWO'
+
 for volume in pv{1..25} ; do
 cat << EOF > /root/pvs/${volume}
 {
@@ -23,5 +26,6 @@ cat << EOF > /root/pvs/${volume}
   }
 }
 EOF
-echo "Created def file for ${volume}";
+
+echo  'Creation of persistent volumes 1-25 of 5Gi completed'
 done;
