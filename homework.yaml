@@ -10,21 +10,7 @@
   tasks:
     - name: docker restart
       shell: systemctl restart docker
-
-- name: Verify NFS Shared Volumes on Hosts
-  hosts: nfs
-  tasks:
-
-- name: Install packages and config auth
-  hosts: localhost
-  tasks:
-    - name: required packages are present
-      yum:
-        name:
-          - ????
-          - ????
-        state: present
-
+      
 - name: Generate Inventory Hosts File
   hosts: localhost
   tasks:
@@ -32,16 +18,19 @@
       script: /root/ocp_advanced_deployment_homework/scripts/generate_inventory.sh
 
 - name: Execute the openshift-ansible prerequisites
-  import_playbook: ???
+  import_playbook: /usr/share/ansible/openshift-ansible/playbooks/prerequisites.yml
 
 - name: Execute the openshift-ansible Deployer
-  import_playbook: ???
+  import_playbook: /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml
 
 - name: Verify OpenShift Cluster
   hosts: masters[0]
   tasks:
     - name: copy the .kube directory from master1 to your bastion
-    ????
+      fetch: 
+        src: "/root/.kube/config"
+        dest: "/root/.kube/config"
+        flat: "yes"
 
 - name: Post installation configuration
   hosts: localhost
@@ -52,37 +41,102 @@
 - name: Create PVs for Users
   hosts: nfs
   tasks:
-    - name:
-      script: ????
+      script: ./scripts/create_pvs.sh
     - name: Restarting NFS Server...
       shell: systemctl restart nfs-server
 
 - name: Create 25 definitions files for PVs 5G size
   hosts: localhost
-
+    - name: "Creating the files.."
+      script: ./scripts/pvs_5Gsize.sh
+      
 - name: Create 25 definitions files for PVs 10G size
-
+  hosts: localhost
+    - name: "Creating the files.."
+      script: ./scripts/pvs_10Gsize.sh
+      
 - name: Create all PVs from definitions files
-
+  hosts: localhost
+    - name: "Creating PVs from definition files.."
+      script: ./scripts/pvs_from_df.sh
+      
 - name: Fix NFS Persistent Volume Recycling
+  tasks:
+    - name: "Pull ose-recycler image"
+      shell: docker pull registry.access.redhat.com/openshift3/ose-recycler:latest
+    - name: "Tag  ose-recycler image as latest"
+      shell: docker tag registry.access.redhat.com/openshift3/ose-recycler:latest registry.access.redhat.com/openshift3/ose-recycler:v3.9.30
+  tags:
+    - fixnfspvr
+
+- name: Setup project request template
+  hosts: localhost 
+  tasks: 
+    - name: Create project request template in default project
+      shell: "oc create -f ./proj-temp.yml -n default || oc replace -f ./proj-temp.yml -n default"
+  tags:
+    - fixtemplate
+
+- name: Update the master config file to use project request template
+  hosts: masters
+  tasks:
+    - name: Add the project request template to the master config"
+      lineinfile:
+        regexp: "  projectRequestTemplate"
+        dest: "/etc/origin/master/master-config.yaml"
+        line: '  projectRequestTemplate: "default/project-request"'
+        state: present
+    - name: Restart master API service 
+      service:
+        name: atomic-openshift-master-api
+        state: restarted
+  tags:
+    - fixtemplate
 
 - name: Smoke Test
-
-- name: Jenkins Setup
   hosts: localhost
   tasks:
-    - name: jenkins setup
-      script: ???
-
-- name: HPA configuration on production deployment of openshift-tasks
+    - name: Create the smoke-test project
+      shell: oc new-project smoke-test
+    - name: Deploy the test app
+      shell: oc new-app --namespace smoke-test nodejs-mongo-persistent 
+  tags:
+    - smoketest
+    
+- name: Creation of projects for Alpha and Beta clients
   hosts: localhost
   tasks:
+    - name: Create alpha project
+      shell: oc new-project alpha
+    - name: Create beta project
+      shell: oc new-project beta
+  tags:
+    - create_projects
 
 - name: Creation of users for Alpha and Beta clients
+  hosts: masters
+  tasks:
+    - name: Adding users for alpha and beta
+      script: ./scripts/add_users_alpha_beta.sh
+  tags:
+    - create_users
 
-- name: Assigning labels to the users according to its group
+- name: Kick off the pipeline
+  hosts: localhost
+  tasks:
+    - name: Wait for the demo environment to fully spin up
+      shell: sleep 300 
+    - name: Kick off the pipeline
+      shell: "oc start-build tasks-pipeline -n cicd-andrew"
+  tags:
+    - kickoffci
 
-- name: Setup the environment for Alpha and Beta clients
-
-
-  ....
+- name: HPA configuration on production
+  hosts: localhost
+  tasks:
+    - name: Wait for tasks pipeline to build
+      shell: sleep 600 
+    - name: Configure autoscaling on openshift-tasks..
+      shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n stage-andrew
+  tags:
+    - hpaconfig
