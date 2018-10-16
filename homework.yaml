@@ -41,6 +41,7 @@
 - name: Create PVs for Users
   hosts: nfs
   tasks:
+    - name: Create PV directories...
       script: ./scripts/create_pvs.sh
     - name: Restarting NFS Server...
       shell: systemctl restart nfs-server
@@ -74,8 +75,6 @@
   tasks: 
     - name: Create project request template in default project
       shell: "oc create -f ./project-template.yaml -n default || oc replace -f ./project-template.yaml -n default"
-  tags:
-    - fixtemplate
 
 - name: Update the master config file to use project request template
   hosts: masters
@@ -90,8 +89,6 @@
       service:
         name: atomic-openshift-master-api
         state: restarted
-  tags:
-    - fixtemplate
 
 - name: Smoke Test
   hosts: localhost
@@ -100,8 +97,6 @@
       shell: oc new-project smoke-test
     - name: Deploy the test app
       shell: oc new-app --namespace smoke-test nodejs-mongo-persistent 
-  tags:
-    - smoketest
     
 - name: Creation of projects for Alpha and Beta clients
   hosts: localhost
@@ -110,16 +105,12 @@
       shell: oc new-project alpha
     - name: Create beta project
       shell: oc new-project beta
-  tags:
-    - create_projects
 
 - name: Creation of users for Alpha and Beta clients
   hosts: masters
   tasks:
     - name: Adding users for alpha and beta
       shell: for user in amy andrew brian betty; do htpasswd -b /etc/origin/master/htpasswd $user r3dh4t1!; done
-  tags:
-    - create_users
 
 - name: Kick off the pipeline
   hosts: localhost
@@ -128,8 +119,6 @@
       shell: sleep 300 
     - name: Kick off the pipeline
       shell: "oc start-build tasks-pipeline -n cicd-andrew"
-  tags:
-    - kickoffci
 
 - name: HPA configuration on production
   hosts: localhost
@@ -138,5 +127,3 @@
       shell: sleep 600 
     - name: Configure autoscaling on openshift-tasks..
       shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n stage-andrew
-  tags:
-    - hpaconfig
