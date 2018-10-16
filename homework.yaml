@@ -45,12 +45,13 @@
       script: ./scripts/create_pvs.sh
     - name: Restarting NFS Server...
       shell: systemctl restart nfs-server
-
+      
 - name: Create 25 definitions files for PVs 5G size
   hosts: localhost
-    - name: Creating the 5G files...
+  tasks:
+    - name: "Creating the 5Gi files.."
       script: ./scripts/pvs_5Gsize.sh
-
+      
 - name: Create 25 definitions files for PVs 10G size
   hosts: localhost
     - name: Creating the 10G files...
