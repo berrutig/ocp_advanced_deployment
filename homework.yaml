@@ -70,7 +70,7 @@
   hosts: localhost
   tasks:
     - name: "Creating the PV from definition files"
-      script: ./scripts/pvs_from_df.sh
+      shell: "cat /root/pvs/* | oc create -f -"
       
 - name: Fix NFS Persistent Volume Recycling
   tasks:
