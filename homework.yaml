@@ -46,18 +46,19 @@
     - name: Restarting NFS Server...
       shell: systemctl restart nfs-server
 
-
-
-
+- name: Create 25 definitions files for PVs 5G size
+  hosts: localhost
+    - name: Creating the 5G files...
+      script: ./scripts/pvs_5Gsize.sh
 
 - name: Create 25 definitions files for PVs 10G size
   hosts: localhost
-    - name: "Creating the 10G files.."
+    - name: Creating the 10G files...
       script: ./scripts/pvs_10Gsize.sh
-      
+
 - name: Create all PVs from definitions files
   hosts: localhost
-    - name: "Creating PVs from definition files.."
+    - name: Creating PVs from definition files...
       script: ./scripts/pvs_from_df.sh
       
 - name: Fix NFS Persistent Volume Recycling
