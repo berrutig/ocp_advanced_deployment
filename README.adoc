@@ -9,11 +9,14 @@ The person grading the assignment will
 * clone a repo
 * execute a command
 * examine the output through log files
-* exmaine the deployed OpenShift to ensure that all aspects of the homework were 
+* examine the deployed OpenShift to ensure that all aspects of the homework were 
 deployed properly.
 
+THe procedure to install openshift is this one:
 
-Good luck!  And try to have fun!
+ansible-playbook ./ocp_advanced_deployment/homework.yaml
 
+To uninstall openshift launch this command:
 
+./ocp_advanced_deployment/scripts/uninstall.sh
 
