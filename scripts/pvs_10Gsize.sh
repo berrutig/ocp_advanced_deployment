@@ -1,11 +1,7 @@
 export GUID=`hostname|awk -F. '{print $2}'`
+export volsize="10Gi"
 
-export volsize="5Gi"
-mkdir /root/pvs
-
-echo 'Now create the persistent volumes 26-20 of 10Gi each as RWM-Retain'
-
-for volume in pv{26..50 ; do
+for volume in pv{26..50} ; do
 cat << EOF > /root/pvs/${volume}
 {
   "apiVersion": "v1",
