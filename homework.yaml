@@ -88,7 +88,7 @@
       shell: sed -i -e 's/\r$//' /root/openshift-cd-demo/scripts/provision.sh
     - name: Adding permissions
       shell: chmod 755 /root/openshift-cd-demo/scripts/provision.sh
-    - name: permiissions..
+    - name: Permissions..
       shell: sed -i -e 's/\r$//' /root/openshift-cd-demo/cicd-template.yaml
     - name: Adding rest of permissions
       shell: chmod 755 /root/openshift-cd-demo/cicd-template.yaml   
@@ -149,8 +149,7 @@
   hosts: localhost
   tasks:
     - name: Wait for tasks pipeline to build
-      shell: sleep 
-      800 
+      shell: sleep 800 
     - name: Configure autoscaling on openshift-tasks..
       shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n tasks-prod
 
