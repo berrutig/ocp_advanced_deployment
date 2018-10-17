@@ -83,7 +83,6 @@
       git:
         repo: 'https://github.com/berrutig/openshift-cd-demo-1.git'
         dest: /root/openshift-cd-demo
-        version: ocp-3.9
     - name: Permissions..
       shell: sed -i -e 's/\r$//' /root/openshift-cd-demo/scripts/provision.sh
     - name: Adding permissions
