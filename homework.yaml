@@ -84,9 +84,17 @@
         repo: 'https://github.com/berrutig/openshift-cd-demo-1.git'
         dest: /root/openshift-cd-demo
         version: ocp-3.9
+    - name: Permissions..
+      shell: sed -i -e 's/\r$//' /root/openshift-cd-demo/scripts/provision.sh
+    - name: Adding permissions
+      shell: chmod 755 /root/openshift-cd-demo/scripts/provision.sh
+    - name: permiissions..
+      shell: sed -i -e 's/\r$//' /root/openshift-cd-demo/cicd-template.yaml
+    - name: Adding rest of permissions
+      shell: chmod 755 /root/openshift-cd-demo/cicd-template.yaml   
     - name: Provision the demo environment..
       shell: /root/openshift-cd-demo/scripts/provision.sh --user andrew deploy
-
+      
 - name: Setup project request template
   hosts: localhost 
   tasks: 
@@ -135,7 +143,7 @@
     - name: Wait for the demo environment to fully spin up
       shell: sleep 300 
     - name: Kick off the pipeline
-      shell: oc start-build tasks-pipeline -n dev-andrew
+      shell: oc start-build tasks-pipeline -n tasks-dev
 
 - name: HPA configuration on production
   hosts: localhost
@@ -144,7 +152,7 @@
       shell: sleep 
       800 
     - name: Configure autoscaling on openshift-tasks..
-      shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n stage-andrew
+      shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n tasks-prod
 
 - name: Multitenancy Test
   hosts: localhost
