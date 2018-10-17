@@ -135,7 +135,7 @@
     - name: Wait for the demo environment to fully spin up
       shell: sleep 300 
     - name: Kick off the pipeline
-      shell: oc start-build tasks-pipeline -n cicd-andrew
+      shell: oc start-build tasks-pipeline -n tasks-dev
 
 - name: HPA configuration on production
   hosts: localhost
@@ -143,4 +143,4 @@
     - name: Wait for tasks pipeline to build
       shell: sleep 1800 
     - name: Configure autoscaling on openshift-tasks..
-      shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n stage-andrew
+      shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n tasks-prod
