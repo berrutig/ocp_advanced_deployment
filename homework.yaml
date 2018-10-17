@@ -144,3 +144,9 @@
       shell: sleep 1800 
     - name: Configure autoscaling on openshift-tasks..
       shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n tasks-prod
+
+- name: Multitenancy Test
+  hosts: localhost
+  tasks:
+    - name: Multitenancy Test
+      script: ./scripts/multitenancy.sh
