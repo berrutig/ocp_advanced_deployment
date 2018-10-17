@@ -66,11 +66,11 @@
     - name: "Creating the 10Gi files"
       script: ./scripts/pvs_10Gsize.sh
 
-- name: Create all PVs from definitions files
+- name: Create all PVs for OCP
   hosts: localhost
   tasks:
-    - name: "Creating the PV from definition files"
-      shell: "cat /root/pvs/* | oc create -f -"
+    - name: Create all PVs for OCP
+      shell: cat /root/pvs/* | oc create -f -
       
 - name: Fix NFS Persistent Volume Recycling
   tasks:
