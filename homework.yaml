@@ -143,4 +143,4 @@
     - name: Wait for tasks pipeline to build
       shell: sleep 1800 
     - name: Configure autoscaling on openshift-tasks..
-      shell: oc autoscale dc/openshift-tasks --max 5 --min 2 --cpu-percent 80 -n stage-andrew
+      shell: oc autoscale dc tasks --max 5 --min 2 --cpu-percent 80 -n stage-andrew
