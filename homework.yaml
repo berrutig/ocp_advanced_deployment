@@ -81,7 +81,7 @@
   tasks:
     - name: Checkout CI/CD demo code..
       git:
-        repo: 'https://github.com/berrutig/openshift-cd-demo.git'
+        repo: 'https://github.com/uzugic/openshift-cd-demo'
         dest: /root/openshift-cd-demo
         version: ocp-3.9
     - name: Provision the demo environment..
