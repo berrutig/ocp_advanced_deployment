@@ -58,9 +58,9 @@
   hosts: localhost
   tasks:
     - name: Create 25 files for 5G PVs
-      script: ./scripts/pvs_5G.sh
+      script: ./scripts/pvs_5Gsize.sh
     - name: Create 25 files for 10G PVs
-      script: ./scripts/pvs_10G.sh
+      script: ./scripts/pvs_10Gsize.sh
 
 - name: Create all PVs for OCP
   hosts: localhost
